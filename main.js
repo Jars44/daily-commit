@@ -5,9 +5,16 @@ import random from "random";
 
 const path = "./data.json";
 
-const markCommit = (x, y) => {
-  const date = moment().subtract(1, "y").add(1, "d").add(x, "w").add(y, "d").format();
+// Generate a random date between one year ago and today (inclusive)
+const getRandomDate = () => {
+  const start = moment().subtract(1, "year").startOf("day");
+  const end = moment().startOf("day");
+  const diffDays = end.diff(start, "days");
+  const randomDays = random.int(0, diffDays);
+  return start.clone().add(randomDays, "days").format();
+};
 
+const markCommit = (date) => {
   const data = {
     date: date,
   };
@@ -19,9 +26,7 @@ const markCommit = (x, y) => {
 
 const makeCommits = (n) => {
   if (n === 0) return simpleGit().push();
-  const x = random.int(0, 54);
-  const y = random.int(0, 6);
-  const date = moment().subtract(1, "y").add(1, "d").add(x, "w").add(y, "d").format();
+  const date = getRandomDate();
 
   const data = {
     date: date,
